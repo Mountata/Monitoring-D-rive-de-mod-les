@@ -15,7 +15,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Installer les dépendances Python
-RUN pip install --no-cache-dir -r requirements.txt
+
+RUN pip install --no-cache-dir --default-timeout=120 -r requirements.txt
 
 # Copier tout le code source
 COPY src/ ./src/
