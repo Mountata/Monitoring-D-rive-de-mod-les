@@ -32,7 +32,7 @@ reports/*.html
 reports/*.pdf
 
 # Docker
-.docker/
+
 docker-compose.override.yml
 
 # IDE
