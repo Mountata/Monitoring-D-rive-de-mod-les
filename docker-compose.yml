@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Service Python - Notre application
+  python-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mlops-drift-monitoring
+    ports:
+      - "8000:8000"  # Prometheus metrics
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+    environment:
+      - PYTHONPATH=/app
+    command: ["python", "-m", "src.pipeline_full_06"]
+    networks:
+      - monitoring-network
+    depends_on:
+      - prometheus
+      - grafana
+
+  # Prometheus - Stockage des métriques
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./.docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - monitoring-network
+
+  # Grafana - Visualisation
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./.docker/grafana/provisioning:/etc/grafana/provisioning
+      - ./.docker/grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    networks:
+      - monitoring-network
+    depends_on:
+      - prometheus
+
+# Volumes persistants
+volumes:
+  prometheus-data:
+  grafana-data:
+
+# Réseau commun
+networks:
+  monitoring-network:
+    driver: bridge

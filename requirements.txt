@@ -1,0 +1,23 @@
+# Core
+numpy==1.24.3
+pandas==2.0.3
+scikit-learn==1.3.0
+
+# Drift Detection
+evidently==0.2.2
+
+# Web Framework (API)
+fastapi==0.100.0
+uvicorn==0.23.0
+
+# Monitoring
+prometheus-client==0.17.0
+
+# Data Visualization
+matplotlib==3.7.2
+seaborn==0.12.2
+
+# Utilitaires
+python-dotenv==1.0.0
+joblib==1.3.1
+pyyaml==6.0
