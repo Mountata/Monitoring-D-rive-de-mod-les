@@ -1,10 +1,10 @@
 """
 Script 06 : Pipeline complet
 - Exécute les étapes 01 à 04 dans l'ordre
+- Lance ensuite le serveur de métriques Prometheus (reste actif)
 """
 import os
 import subprocess
-import webbrowser
 import time
 
 STEPS = [
@@ -45,11 +45,24 @@ def run_pipeline():
     print("\n" + "=" * 60)
     print("✅ PIPELINE TERMINÉ AVEC SUCCÈS")
     print("=" * 60)
-    print("\n🔍 Prochaine étape : lancer l'export Prometheus avec")
-    print("   python src/export_metrics_05.py")
 
     return True
 
 
+def start_monitoring_server():
+    print("\n" + "=" * 60)
+    print("📡 DÉMARRAGE DU SERVEUR DE MÉTRIQUES")
+    print("=" * 60)
+    print("Le conteneur reste actif pour exposer les métriques à Prometheus.")
+    print("Endpoint : http://python-app:8000/metrics\n")
+
+    # Ce subprocess bloque volontairement (le serveur tourne en boucle infinie)
+    subprocess.run(['python', 'src/export_metrics_05.py'])
+
+
 if __name__ == "__main__":
-    run_pipeline()
+    success = run_pipeline()
+    if success:
+        start_monitoring_server()
+    else:
+        print("\n❌ Le pipeline a échoué, le serveur de métriques n'est pas démarré.")
