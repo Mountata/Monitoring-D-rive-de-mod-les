@@ -1,7 +1,7 @@
 numpy==2.2.6
 pandas==2.3.3
 scikit-learn==1.7.2
- evidently==0.4.40
+evidently==0.7.21
 prometheus_client==0.26.0
 matplotlib==3.10.9
 seaborn==0.13.2
